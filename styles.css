@@ -1,16 +1,27 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
 }
-ul.nav {
+ body {
+  padding-top: 2.5rem;
+}
+header .nav{
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%;
+  height: 2.5rem;
+  z-index: 1;
   margin: 0;
   padding: 0;
+}
+ul.nav {
+
   list-style: none;
-  height: 36px;
-  line-height: 36px;
+  line-height: 2.5rem;
   background: #0d7963; /* you can change the backgorund color here. */
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 0.75rem;
 }
 ul.nav li {
   border-right: 1px solid #189b80; /* you can change the border color matching to your background color */
@@ -18,7 +29,7 @@ ul.nav li {
 }
 ul.nav a {
   display: block;
-  padding: 0 28px;
+  padding: 0 1.5rem;
   color: #ccece6;
   text-decoration: none;
 }
@@ -27,29 +38,26 @@ ul.nav li.current a {
   background: #086754;
 }
 
-main {
+.page-container {
   /* make sure to cover the screen */
-  min-height: calc(100vh - 36*4px);
-
-  /* need a solid bg to hide the footer */
-  background: white;
-
-  /* put on top */
   position: relative;
-  z-index: 1;
+  min-height: 100vh;
+  /* need a solid bg to hide the footer */
+  /* background: white; */
+}
 
-  font: 16px/1.4 system-ui, sans-serif;
-  padding: 2rem;
+main {
+
+  padding-bottom: 2.5rem;
 }
 footer {
   /* place on the bottom */
-  position: sticky;
+  position: absolute;
   bottom: 0;
-  left: 0;
   width: 100%;
+  height: 2.5rem;
 
   background: #252a47;
   display: grid;
   place-items: center;
-  min-height: 36px;
 }
