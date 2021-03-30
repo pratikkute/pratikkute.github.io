@@ -17,24 +17,62 @@ body {
 	font-weight: 400;
 }
 
-.content {
-  height: 200vh;
-  background-image: url(//unsplash.it/1000/1000);
-  background-color: #333;
-  background-blend-mode: multiply;
-  background-size: cover;
-  display: grid;
-  place-items: center;
-}
 
 /* navigation styles start here */
 
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
   background: var(--primary);
   text-align: center;
-  position: fixed;
-  z-index: 999;
+}
+
+
+
+nav {
+  position: absolute;
   width: 100%;
+
+  text-align: left;
+  background: var(--primary);
+  transform: scale(1, 0);
+  transform-origin: top;
+  transition: transform 400ms ease-in-out;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+nav a {
+  display: block;
+  padding: 0.8em;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+}
+
+nav a:hover {
+  color: var(--accent);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.nav-toggle:checked ~ nav {
+  transform: scale(1,1);
+}
+
+.nav-toggle:checked ~ nav a {
+  opacity: 1;
+  transition: opacity 250ms ease-in-out 250ms;
 }
 
 /* changed this from the tutorial video to
@@ -68,6 +106,7 @@ header {
   width: 2em;
   border-radius: 2px;
   position: relative;
+  cursor: pointer;
 }
 
 .nav-toggle-label span::before,
@@ -84,50 +123,6 @@ header {
   top: 7px;
 }
 
-nav {
-  position: absolute;
-  text-align: left;
-  top: 100%;
-  left: 0;
-  background: var(--primary);
-  width: 100%;
-  transform: scale(1, 0);
-  transform-origin: top;
-  transition: transform 400ms ease-in-out;
-}
-
-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-nav li {
-  margin-bottom: 1em;
-  margin-left: 1em;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity 150ms ease-in-out;
-}
-
-nav a:hover {
-  color: var(--accent);
-}
-
-.nav-toggle:checked ~ nav {
-  transform: scale(1,1);
-}
-
-.nav-toggle:checked ~ nav a {
-  opacity: 1;
-  transition: opacity 250ms ease-in-out 250ms;
-}
 
 @media screen and (min-width: 800px) {
   .nav-toggle-label {
@@ -169,6 +164,7 @@ nav a:hover {
   nav li {
     margin-left: 3em;
     margin-bottom: 0;
+    padding: 15px;
   }
 
   nav a {
@@ -195,16 +191,38 @@ nav a:hover {
 
 }
 
+
+/* page content and fooler */
+
 .page-container {
   /* make sure to cover the screen */
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  /* need a solid bg to hide the footer */
-  /* background: white; */
+  padding-top: 5.2rem;
+  align-items: center;
+  background-image: url(//unsplash.it/1000/1000);
+  background-color: #333;
+  background-blend-mode: multiply;
+  background-size: cover;
 }
 
 main {
   padding-bottom: 2.5rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+}
+
+
+.content {
+  text-align: justify;
+}
+.content h1{
+text-align: center;
+
 }
 
 footer {
@@ -215,7 +233,8 @@ footer {
   height: 2.5rem;
 
   background: #252a47;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
