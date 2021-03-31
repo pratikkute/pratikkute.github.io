@@ -20,7 +20,7 @@ body {
 
 /* navigation styles start here */
 
-header {
+.navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -31,11 +31,9 @@ header {
 }
 
 
-
 nav {
   position: absolute;
   width: 100%;
-
   text-align: left;
   background: var(--primary);
   transform: scale(1, 0);
@@ -238,3 +236,7 @@ footer {
   justify-content: center;
 }
 
+pre{
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.8);
+}
