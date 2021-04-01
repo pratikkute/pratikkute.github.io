@@ -11,7 +11,7 @@
 
 <body>
   <header class="navbar">
-    <h1 class="logo">Logo</h1>
+    <h1 class="logo"><a href="#">Logo</a></h1>
     <input type="checkbox" id="nav-toggle" class="nav-toggle" />
     <nav>
       <ul>
@@ -36,7 +36,6 @@
         <pre><code class="lang-sh"><span class="hljs-built_in">replace</span> <span class="hljs-keyword">the</span> name <span class="hljs-keyword">of</span> PROJECT <span class="hljs-keyword">in the files</span> deploy_website.sh <span class="hljs-keyword">and</span> <span class="hljs-number">000</span>-default.conf
 copy <span class="hljs-built_in">files</span> <span class="hljs-built_in">to</span> server: requirements.txt, deploy_website.sh and 000-default.conf
 run <span class="hljs-keyword">the</span> following <span class="hljs-keyword">commands</span>
-
 </code></pre>
 <pre>
 chmod u+x deploy_website.sh
@@ -70,15 +69,15 @@ sudo cp ~/000-default.conf /etc/apache2/sites-available/
 sudo service apache2 restart</span>
 </code></pre>
 
-        <h3 id="requirements-txt">requirements.txt</h3>
-        <pre><code class="lang-sh"><span class="hljs-attr">Django</span>==<span class="hljs-number">1.11</span>.<span class="hljs-number">29</span>
+<h3 id="requirements-txt">requirements.txt</h3>
+<pre><code class="lang-sh"><span class="hljs-attr">Django</span>==<span class="hljs-number">1.11</span>.<span class="hljs-number">29</span>
 <span class="hljs-attr">django-crispy-forms</span>==<span class="hljs-number">1.9</span>.<span class="hljs-number">0</span>
 <span class="hljs-attr">Pillow</span>==<span class="hljs-number">7.1</span>.<span class="hljs-number">1</span>
 <span class="hljs-attr">requests</span>==<span class="hljs-number">2.23</span>.<span class="hljs-number">0</span>
 </code></pre>
-        <h3 id="000-default-conf">000-default.conf</h3>
-        <pre><code class="lang-sh"><span class="hljs-params">&lt;VirtualHost *:<span class="hljs-number">80</span>&gt;</span>
 
+<h3 id="000-default-conf">000-default.conf</h3>
+<pre><code class="lang-sh"><span class="hljs-params">&lt;VirtualHost *:<span class="hljs-number">80</span>&gt;</span>
 
     ServerAdmin webmaster@localhost
     DocumentRoot <span class="hljs-meta-keyword">/var/</span>www/html
