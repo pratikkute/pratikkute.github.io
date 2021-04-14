@@ -221,12 +221,10 @@ main {
 
 
 .content {
-  text-align: justify;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2em;
 }
-.content h1{
-text-align: center;
 
-}
 
 footer {
   /* place on the bottom */
@@ -241,9 +239,3 @@ footer {
   justify-content: center;
 }
 
-pre{
-  padding: 2em;
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 1em ;
-}

@@ -29,90 +29,14 @@
   <page-wraper class="page-container">
     <main>
       <div class="content">
-        <h1 id="one-click-deploy-django-website">
-          One click deploy Django website
-        </h1>
-        <h2>Steps</h2>
-        <pre><code class="lang-sh"><span class="hljs-built_in">replace</span> <span class="hljs-keyword">the</span> name <span class="hljs-keyword">of</span> PROJECT <span class="hljs-keyword">in the files</span> deploy_website.sh <span class="hljs-keyword">and</span> <span class="hljs-number">000</span>-default.conf
-copy <span class="hljs-built_in">files</span> <span class="hljs-built_in">to</span> server: requirements.txt, deploy_website.sh and 000-default.conf
-run <span class="hljs-keyword">the</span> following <span class="hljs-keyword">commands</span>
-</code></pre>
-<pre>
-chmod u+x deploy_website.sh
-.\deploy_website.sh
-</pre>
-
-        <h2>Files</h2>
-        <h3>deploy_website.sh</h3>
-        <pre><code class="lang-sh">#! /bin/bash
-sudo timedatectl <span class="hljs-keyword">set</span>-timezone <span class="hljs-comment">Asia</span>/Kolkata
-sudo apt-get update &amp;&amp; sudo apt-get upgrade -y
-sudo apt-get install python3-pip -y
-sudo apt-get install apache2 libapache2-<span class="hljs-built-in">mod</span>-wsgi-py3 -y
-sudo pip3 install virtualenv
-cd /<span class="hljs-comment">home</span>/ubuntu
-mkdir venv
-virtualenv -p python3 ~/<span class="hljs-comment">venv</span>/.
-source ~/<span class="hljs-comment">venv</span>/bin/<span class="hljs-comment">activate</span>
-pip <span class="hljs-comment">install -r</span> ~/requirements.txt
-django-admin.py startproject PROJECT
-cd ~/<span class="hljs-comment">PROJECT</span>
-mkdir <span class="hljs-comment">media static templates</span>
-python <span class="hljs-comment">manage.py migrate</span>
-sudo <span class="hljs-comment">adduser $USER www-data</span>
-sudo <span class="hljs-comment">chown -R :www-data</span> /home/<span class="hljs-comment">ubuntu</span>/PROJECT/
-sudo <span class="hljs-comment">chown :www-data</span> /home/<span class="hljs-comment">ubuntu</span>/PROJECT/<span class="hljs-comment">db.sqlite3</span>
-sudo <span class="hljs-comment">chmod -R 775</span> /home/<span class="hljs-comment">ubuntu</span>/venv/
-sudo <span class="hljs-comment">chmod -R 775</span> /home/<span class="hljs-comment">ubuntu</span>/PROJECT/
-sudo <span class="hljs-comment">chown -R $USER</span> /etc/<span class="hljs-comment">apache2</span>/sites-available<span class="hljs-comment">/*
-sudo cp ~/000-default.conf /etc/apache2/sites-available/
-sudo service apache2 restart</span>
-</code></pre>
-
-<h3 id="requirements-txt">requirements.txt</h3>
-<pre><code class="lang-sh"><span class="hljs-attr">Django</span>==<span class="hljs-number">1.11</span>.<span class="hljs-number">29</span>
-<span class="hljs-attr">django-crispy-forms</span>==<span class="hljs-number">1.9</span>.<span class="hljs-number">0</span>
-<span class="hljs-attr">Pillow</span>==<span class="hljs-number">7.1</span>.<span class="hljs-number">1</span>
-<span class="hljs-attr">requests</span>==<span class="hljs-number">2.23</span>.<span class="hljs-number">0</span>
-</code></pre>
-
-<h3 id="000-default-conf">000-default.conf</h3>
-<pre><code class="lang-sh"><span class="hljs-params">&lt;VirtualHost *:<span class="hljs-number">80</span>&gt;</span>
-
-    ServerAdmin webmaster@localhost
-    DocumentRoot <span class="hljs-meta-keyword">/var/</span>www/html
-
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    Alias /static <span class="hljs-meta-keyword">/home/</span>ubuntu<span class="hljs-meta-keyword">/project/</span>static
-    <span class="hljs-params">&lt;Directory /home/ubuntu/project/static&gt;</span>
-        Require all granted
-    <span class="hljs-params">&lt;/Directory&gt;</span>
-
-    Alias /media <span class="hljs-meta-keyword">/home/</span>ubuntu<span class="hljs-meta-keyword">/project/</span>media
-    <span class="hljs-params">&lt;Directory /home/ubuntu/project/media&gt;</span>
-                Require all granted
-        <span class="hljs-params">&lt;/Directory&gt;</span>
-
-    <span class="hljs-params">&lt;Directory /home/ubuntu/project/project&gt;</span>
-        <span class="hljs-params">&lt;Files wsgi.py&gt;</span>
-            Require all granted
-        <span class="hljs-params">&lt;/Files&gt;</span>
-     <span class="hljs-params">&lt;/Directory&gt;</span>
-
-    WSGIDaemonProcess project python-path=<span class="hljs-meta-keyword">/home/</span>ubuntu/project python-home=<span class="hljs-meta-keyword">/home/</span>ubuntu/venv
-    WSGIProcessGroup project
-    WSGIScriptAlias / <span class="hljs-meta-keyword">/home/</span>ubuntu<span class="hljs-meta-keyword">/project/</span>project/wsgi.py
-
-<span class="hljs-params">&lt;/VirtualHost&gt;</span>
-</code></pre>
+<zero-md src="README.md"></zero-md>
       </div>
     </main>
     <footer>
-      <p>Lets have a footer</p>
+      <p>(C)</p>
     </footer>
   </page-wraper>
+<script type="module" src="zero-md.min.js" ></script>
 </body>
 
 </html>
