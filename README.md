@@ -1,5 +1,8 @@
 # One click deploy Django website
 
+## Get all files here [Github repo](https://github.com/pratikkute/deploy_new_websiite).
+----
+
 replace the name of company  
 copy files to server home  
 run the following command  
