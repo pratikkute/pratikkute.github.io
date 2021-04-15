@@ -1,23 +1,23 @@
-# One click deploy Django website
+# One click deploy Django website with apache server on ubuntu ...
 
 ## Get all files here [Github repo](https://github.com/pratikkute/deploy_new_websiite).
-----
 
-replace the name of company  
-copy files to server home  
-run the following command  
-sudo chmod u+x deploy_website.sh
 
-then run
+Replace the 'COMPANY' with your project from all files from repo!  
+Copy files to server home  
+Run the following command  
+
 ````sh
+sudo chmod u+x deploy_website.sh
 ./deploy_website.sh
 ````
+
 ## Update settings file
-add ip and domain name to allowed host  
+Add ip and domain name to allowed host  
 ```
 ALLOWED_HOSTS = ["*"]
 ```
-add "home" to installed app in settings  
+Add "home" to installed app in settings  
 ````
 INSTALLED_APPS = ['home']
 ````
