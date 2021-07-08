@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deploy Django + Channels website with nginx and daphne server on ubuntu</title>
+<link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <header class="page-header">
+  <div class="container">
+    <div class="page-header__content">
+      <div>
+        PRATIKKUTE
+      </div>
+      <nav>
+
+        <ul role="list" class="nav-list flex-group">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+  <main>
+        
+<article class="main-article">
+<div class="container container--narrow flow">
+  
+    <h1 class="article-title">
+      Deploy Django + Channels website with nginx and daphne server on ubuntu
+    </h1>
+    <figure class="main-article__figure">
+      <img src="/assets/blog/django-channels.webp" alt="Django + Channels deployment">
+      <figcaption>
+        Django + Channels deployment
+      </figcaption>
+    </figure>
+    
+    <h1>Deploy Django + Channels website with nginx and daphne server on ubuntu</h1>
+<h2>Get all files here <a href="https://github.com/pratikkute/deploy_new_websiite">Github repo</a>.</h2>
+<h2>Specifications</h2>
+<ol>
+<li>Ubuntu 20.04</li>
+<li>Django Channels 3</li>
+<li>Redis Install and Config</li>
+<li>ASGI for Hosting Django Channels</li>
+<li>Deploying Django Channels with Daphne using supervisor
+<ol>
+<li>Starting the daphne service</li>
+<li>Writing a supervisor script that tells daphne to start</li>
+</ol>
+</li>
+<li>Configure Nginx</li>
+<li>HTTPS with <a href="https://letsencrypt.org/">letsencrypt</a></li>
+</ol>
+<h2>basic apt reuired</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">apt-get</span> upgrade -y<br><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3.9 -y<br><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> python3.9-dev python3.9-venv -y<br><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> python3-pip -y<br><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nginx supervisor</code></pre>
+<h2>requirement.txt</h2>
+<pre class="language-txt"><code class="language-txt">django<br>channels<br>channels_redis</code></pre>
+<h2>Start Django project in virtual env</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~<br><span class="token function">mkdir</span> venv<br>python3.9 -m venv ~/venv/.<br><span class="token builtin class-name">source</span> ~/venv/bin/activate<br>pip <span class="token function">install</span> setproctitle<br>pip <span class="token function">install</span> -r ~/requirements.txt<br>django-admin.py startproject PROJECT-NAME<br><span class="token builtin class-name">cd</span> ~/PROJECT-NAME<br><span class="token function">mkdir</span> media static templates<br>python manage.py startapp home<br>python manage.py migrate<br><span class="token function">sudo</span> adduser <span class="token environment constant">$USER</span> www-data<br><span class="token function">sudo</span> <span class="token function">chown</span> -R :www-data ~/PROJECT-NAME/<br><span class="token function">sudo</span> <span class="token function">chown</span> :www-data ~/PROJECT-NAME/db.sqlite3<br><span class="token function">sudo</span> <span class="token function">chmod</span> -R <span class="token number">775</span> ~/venv/<br><span class="token function">sudo</span> <span class="token function">chmod</span> -R <span class="token number">775</span> ~/PROJECT-NAME/</code></pre>
+<h2>Install and Setup Redis</h2>
+<p>Redis is used as a kind of &quot;messaging queue&quot; for django channels. Read more about it here <a href="https://channels.readthedocs.io/en/stable/topics/channel_layers.html?highlight=redis#redis-channel-layer">channel_layers</a></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> redis-server</code></pre>
+<p>Navigate to <code>/etc/redis/</code></p>
+<p>open <code>redis.conf</code></p>
+<p><code>CTRL+F</code> to find 'supervised no'</p>
+<p>change 'supervised no' to 'supervised systemd'</p>
+<p><code>SAVE</code></p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart redis.service<br><span class="token function">sudo</span> systemctl status redis</code></pre>
+<h3>Add &quot;CHANNEL_LAYERS&quot; &amp; &quot;ASGI_APPLICATION&quot; to installed app in settings</h3>
+<pre class="language-py"><code class="language-py">ASGI_APPLICATION <span class="token operator">=</span> <span class="token string">"PROJECT-FOLDER.asgi.application"</span><br><br>CHANNEL_LAYERS <span class="token operator">=</span> <span class="token punctuation">{</span><br>    <span class="token string">"default"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><br>        <span class="token string">"BACKEND"</span><span class="token punctuation">:</span> <span class="token string">"channels_redis.core.RedisChannelLayer"</span><span class="token punctuation">,</span><br>        <span class="token string">"CONFIG"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><br>            <span class="token string">"hosts"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">"redis-server-name"</span><span class="token punctuation">,</span> <span class="token number">6379</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>        <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br><span class="token punctuation">}</span></code></pre>
+<h3>Edit asgi.py</h3>
+<pre class="language-py"><code class="language-py"><span class="token keyword">import</span> os<br><br><span class="token keyword">from</span> django<span class="token punctuation">.</span>core<span class="token punctuation">.</span>asgi <span class="token keyword">import</span> get_asgi_application<br><br>os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>setdefault<span class="token punctuation">(</span><span class="token string">"DJANGO_SETTINGS_MODULE"</span><span class="token punctuation">,</span> <span class="token string">"PROJECT-FOLDER.settings"</span><span class="token punctuation">)</span><br>django_asgi_app <span class="token operator">=</span> get_asgi_application<span class="token punctuation">(</span><span class="token punctuation">)</span><br><br><span class="token keyword">from</span> channels<span class="token punctuation">.</span>routing <span class="token keyword">import</span> ProtocolTypeRouter<span class="token punctuation">,</span> URLRouter<br><br><span class="token keyword">from</span> channels<span class="token punctuation">.</span>auth <span class="token keyword">import</span> AuthMiddlewareStack<br><span class="token keyword">from</span> django<span class="token punctuation">.</span>urls <span class="token keyword">import</span> path<br><br><span class="token keyword">from</span> chat<span class="token punctuation">.</span>consumers <span class="token keyword">import</span> ChatConsumer<br><br>application <span class="token operator">=</span> ProtocolTypeRouter<span class="token punctuation">(</span><br>    <span class="token punctuation">{</span><br>        <span class="token string">"http"</span><span class="token punctuation">:</span> django_asgi_app<span class="token punctuation">,</span><br>        <span class="token string">"websocket"</span><span class="token punctuation">:</span> AuthMiddlewareStack<span class="token punctuation">(</span><br>            URLRouter<span class="token punctuation">(</span><br>                <span class="token punctuation">[</span><br>                    path<span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span> ChatConsumer<span class="token punctuation">.</span>as_asgi<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span><br>                <span class="token punctuation">]</span><br>            <span class="token punctuation">)</span><br>        <span class="token punctuation">)</span><span class="token punctuation">,</span><br>    <span class="token punctuation">}</span><br><span class="token punctuation">)</span><br></code></pre>
+<h2>Deploying Django Channels with Daphne <a href="https://channels.readthedocs.io/en/stable/deploying.html">Ref</a></h2>
+<p>Now, you will need to create the supervisor configuration file (often located in /etc/supervisor/conf.d/ - here, we’re making Supervisor listen on the TCP port and then handing that socket off to the child processes so they can all share the same bound port:</p>
+<h3>supervior.conf</h3>
+<pre class="language-editorconfig"><code class="language-editorconfig"><span class="token section keyword"><span class="token punctuation">[</span>fcgi-program:asgi<span class="token punctuation">]</span></span><br><span class="token property">socket</span><span class="token value string"><span class="token punctuation">=</span>tcp://localhost:8001</span><br><span class="token property">directory</span><span class="token value string"><span class="token punctuation">=</span>/home/ubuntu/PROJECT-FOLDER</span><br><span class="token property">command</span><span class="token value string"><span class="token punctuation">=</span>/home/ubuntu/venv/bin/daphne -u /home/ubuntu/PROJECT-FOLDER/run/daphne%(process_num)d.sock --fd 0 --access-log - --proxy-headers PROJECT-FOLDER.asgi:application</span><br><span class="token property">numprocs</span><span class="token value string"><span class="token punctuation">=</span>4</span><br><span class="token property">process_name</span><span class="token value string"><span class="token punctuation">=</span>asgi%(process_num)d</span><br><span class="token property">autostart</span><span class="token value string"><span class="token punctuation">=</span>true</span><br><span class="token property">autorestart</span><span class="token value string"><span class="token punctuation">=</span>true</span><br><span class="token property">stdout_logfile</span><span class="token value string"><span class="token punctuation">=</span>/home/ubuntu/logs/daphne-error.log</span><br><span class="token property">redirect_stderr</span><span class="token value string"><span class="token punctuation">=</span>true</span></code></pre>
+<h2>Create the run directory for the sockets referenced in the supervisor configuration file.</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> /home/ubuntu/PROJECT-FOLDER/run/<br><span class="token function">sudo</span> <span class="token function">mkdir</span> /home/ubuntu/logs/<br><span class="token function">sudo</span> <span class="token function">chown</span> <span class="token operator">&lt;</span>user<span class="token operator">></span>.<span class="token operator">&lt;</span>group<span class="token operator">></span> /home/ubuntu/PROJECT-FOLDER/run/<br><span class="token function">sudo</span> <span class="token function">chmod</span> -R <span class="token number">775</span> ~/PROJECT-FOLDER/</code></pre>
+<h2>Have supervisor reread and update its jobs:</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> supervisorctl reread<br><span class="token function">sudo</span> supervisorctl update</code></pre>
+<h2>Configure Nginx</h2>
+<p>We need to tell nginx to allow websocket data to move through port 8001.</p>
+<p>Navigate to <code>/etc/nginx/sites-available</code></p>
+<p>Update <code>default</code> file</p>
+<pre class="language-nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">upstream</span> daphne_server</span> <span class="token punctuation">{</span><br>    <span class="token directive"><span class="token keyword">server</span> localhost:8001</span><span class="token punctuation">;</span><br><span class="token punctuation">}</span><br><br><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">{</span><br><br>    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span> default_server</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">listen</span> [::]:80 default_server</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">server_name</span> &lt;DOMAIN></span><span class="token punctuation">;</span><br><br>    <span class="token directive"><span class="token keyword">keepalive_timeout</span> <span class="token number">5</span></span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">client_max_body_size</span> <span class="token number">4G</span></span><span class="token punctuation">;</span><br><br>    <span class="token directive"><span class="token keyword">access_log</span> /home/ubuntu/logs/nginx-access.log</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">error_log</span> /home/ubuntu/logs/nginx-error.log</span><span class="token punctuation">;</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /static/</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">alias</span> /home/ubuntu/PROJECT-FOLDER/static/</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /media/</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">alias</span> /home/ubuntu/PROJECT-FOLDER/media/</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">try_files</span> <span class="token variable">$uri</span> @proxy_to_app</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> @proxy_to_app</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">proxy_pass</span> http://daphne_server</span><span class="token punctuation">;</span><br><br>        <span class="token directive"><span class="token keyword">proxy_http_version</span> 1.1</span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Upgrade <span class="token variable">$http_upgrade</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Connection <span class="token string">"upgrade"</span></span><span class="token punctuation">;</span><br><br>        <span class="token directive"><span class="token keyword">proxy_redirect</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Host <span class="token variable">$host</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Real-IP <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-Host <span class="token variable">$server_name</span></span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br><span class="token punctuation">}</span><br></code></pre>
+<h2>HTTPS (If you have a domain registered and it's working)</h2>
+<p><strong>Do not do this step unless you're able to visit your website using the custom domain.</strong> See <a href="How-do-you-know-its-working?">How do you know it's working?</a></p>
+<h4>Install certbot</h4>
+<p>HTTPS is a little more difficult to set up when using Django Channels. Nginx and Daphne require some extra configuring.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> certbot python3-certbot-nginx<br><span class="token function">sudo</span> systemctl reload nginx</code></pre>
+<p>Make sure nginx configuration is still good.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> nginx -t</code></pre>
+<h4>Allow HTTPS through firewall</h4>
+<p><code>sudo ufw allow 'Nginx Full'</code></p>
+<p><code>sudo ufw delete allow 'Nginx HTTP'</code> Block standard HTTP</p>
+<h4>Obtain SSL certificate</h4>
+<p><code>sudo certbot --nginx -d &lt;your-domain.whatever&gt; -d www.&lt;your-domain.whatever&gt;</code></p>
+<p>For eg:</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> certbot --nginx -d demo.xyz -d www.demo.xyz</code></pre>
+<h4>Verifying Certbot Auto-Renewal</h4>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl status certbot.timer</code></pre>
+<h4>Test renewal process</h4>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> certbot renew --dry-run</code></pre>
+<h3>Update nginx config</h3>
+<p>Navigate to <code>/etc/nginx/sites-available</code></p>
+<p>Update <code>default</code> file for the cert</p>
+<pre class="language-nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">upstream</span> daphne_server</span> <span class="token punctuation">{</span><br>    <span class="token directive"><span class="token keyword">server</span> localhost:8001</span><span class="token punctuation">;</span><br><span class="token punctuation">}</span><br><br><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">{</span><br><br>    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span> default_server</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">listen</span> [::]:80 default_server</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">443</span> ssl</span><span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span><br>    <span class="token directive"><span class="token keyword">server_name</span> &lt;DOMAIN></span><span class="token punctuation">;</span><br><br><br>    <span class="token comment"># RSA certificate</span><br>    <span class="token directive"><span class="token keyword">ssl_certificate</span> /etc/letsencrypt/live/&lt;DOMAIN>/fullchain.pem</span><span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span><br>    <span class="token directive"><span class="token keyword">ssl_certificate_key</span> /etc/letsencrypt/live/&lt;DOMAIN>/privkey.pem</span><span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span><br><br>    <span class="token directive"><span class="token keyword">include</span> /etc/letsencrypt/options-ssl-nginx.conf</span><span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span><br><br>    <span class="token directive"><span class="token keyword">Redirect</span> non-https traffic to https<br>    if (<span class="token variable">$scheme</span> != <span class="token string">"https"</span>)</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">return</span> <span class="token number">301</span> https://<span class="token variable">$host</span><span class="token variable">$request_uri</span></span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span> <span class="token comment"># managed by Certbot</span><br><br><br>    <span class="token directive"><span class="token keyword">keepalive_timeout</span> <span class="token number">5</span></span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">client_max_body_size</span> <span class="token number">4G</span></span><span class="token punctuation">;</span><br><br>    <span class="token directive"><span class="token keyword">access_log</span> /home/ubuntu/logs/nginx-access.log</span><span class="token punctuation">;</span><br>    <span class="token directive"><span class="token keyword">error_log</span> /home/ubuntu/logs/nginx-error.log</span><span class="token punctuation">;</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /static/</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">alias</span> /home/ubuntu/PROJECT-FOLDER/static/</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /media/</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">alias</span> /home/ubuntu/PROJECT-FOLDER/media/</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">try_files</span> <span class="token variable">$uri</span> @proxy_to_app</span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br>    <span class="token directive"><span class="token keyword">location</span> @proxy_to_app</span> <span class="token punctuation">{</span><br>        <span class="token directive"><span class="token keyword">proxy_pass</span> http://daphne_server</span><span class="token punctuation">;</span><br><br>        <span class="token directive"><span class="token keyword">proxy_http_version</span> 1.1</span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Upgrade <span class="token variable">$http_upgrade</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Connection <span class="token string">"upgrade"</span></span><span class="token punctuation">;</span><br><br>        <span class="token directive"><span class="token keyword">proxy_redirect</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> Host <span class="token variable">$host</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Real-IP <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span><br>        <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-Host <span class="token variable">$server_name</span></span><span class="token punctuation">;</span><br>    <span class="token punctuation">}</span><br><br><span class="token punctuation">}</span><br></code></pre>
+<h2>Check and restart nginx and daphne server</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> supervisorctl restart asgi<br><span class="token function">sudo</span> supervisorctl status<br><span class="token function">sudo</span> nginx -t <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> systemctl restart nginx</code></pre>
+
+
+</div>
+</article>
+
+  </main>
+  <footer class="site-footer">
+  <p>© 2021 Pratik Kute. All rights reserved.</p>
+</footer>
+
+  <script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
