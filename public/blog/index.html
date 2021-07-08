@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog</title>
+<link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <header class="page-header">
+  <div class="container">
+    <div class="page-header__content">
+      <div>
+        PRATIKKUTE
+      </div>
+      <nav>
+
+        <ul role="list" class="nav-list flex-group">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+  <main>
+    
+
+<div class="section container">
+<h1 class="section-title">Recent articles</h1>
+
+<ul role="list" class="articles__list flow"><li>
+  <article class="snippet">
+    <img src="/assets/blog/article-1.jpg" alt="Django deployment" class="snippet__image">
+    <h3 class="snippet__title"><a href="/blog/2021-05-01-my-first-article/">One click deploy Django website with apache server on ubuntu</a></h3>
+    <p class="snippet__meta">by <span>Pratik Kute</span> on <span>1 May 2021</span></p>
+    <p class="snippet__body">One click deploy Django website with apache server on ubuntu ...</p> 
+    <a href="/blog/2021-05-01-my-first-article/" class="btn btn--primary">Continue Reading</a>
+  </article> 
+</li>
+
+</ul>
+
+</div>
+
+
+
+  </main>
+  <footer class="site-footer">
+  <p>© 2021 Pratik Kute. All rights reserved.</p>
+</footer>
+
+  <script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One click deploy Django website with apache server on ubuntu</title>
+<link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <header class="page-header">
+  <div class="container">
+    <div class="page-header__content">
+      <div>
+        PRATIKKUTE
+      </div>
+      <nav>
+
+        <ul role="list" class="nav-list flex-group">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/blog/">Blog</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+  <main>
+        
+<article class="main-article">
+<div class="container container--narrow flow">
+  
+    <h1 class="article-title">
+      One click deploy Django website with apache server on ubuntu
+    </h1>
+    <figure class="main-article__figure">
+      <img src="/assets/blog/article-1.jpg" alt="Django deployment">
+      <figcaption>
+        Django deployment
+      </figcaption>
+    </figure>
+    
+    <h1>One click deploy Django website with apache server on ubuntu ...</h1>
+<h2>Get all files here <a href="https://github.com/pratikkute/deploy_new_websiite">Github repo</a>.</h2>
+<p>Replace the 'COMPANY' with your project from all files from repo!
+Copy files to server home
+Run the following command</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chmod</span> u+x deploy_website.sh<br>./deploy_website.sh</code></pre>
+<h2>Update settings file</h2>
+<p>Add ip and domain name to allowed host</p>
+<pre class="language-py"><code class="language-py">ALLOWED_HOSTS <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"*"</span><span class="token punctuation">]</span></code></pre>
+<p>Add &quot;home&quot; to installed app in settings</p>
+<pre class="language-py"><code class="language-py">INSTALLED_APPS <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'home'</span><span class="token punctuation">]</span></code></pre>
+<h3>Add template DIRS</h3>
+<pre class="language-py"><code class="language-py"><span class="token string">'DIRS'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>BASE_DIR<span class="token punctuation">,</span> <span class="token string">'templates'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span></code></pre>
+<h3>Email</h3>
+<pre class="language-py"><code class="language-py">EMAIL_HOST <span class="token operator">=</span> <span class="token string">"smtp.gmail.com"</span><br>EMAIL_HOST_USER <span class="token operator">=</span> <span class="token string">""</span><br>EMAIL_HOST_PASSWORD <span class="token operator">=</span> <span class="token string">""</span><br>EMAIL_PORT <span class="token operator">=</span> <span class="token number">587</span><br>EMAIL_USE_TLS <span class="token operator">=</span> <span class="token boolean">True</span></code></pre>
+<h3>Internationalization</h3>
+<h3>https://docs.djangoproject.com/en/2.2/topics/i18n/</h3>
+<pre class="language-py"><code class="language-py">LANGUAGE_CODE <span class="token operator">=</span> <span class="token string">'en-us'</span><br>TIME_ZONE <span class="token operator">=</span> <span class="token string">'Asia/Kolkata'</span><br>USE_I18N <span class="token operator">=</span> <span class="token boolean">True</span><br>USE_L10N <span class="token operator">=</span> <span class="token boolean">True</span><br>USE_TZ <span class="token operator">=</span> <span class="token boolean">True</span></code></pre>
+<h3>Static files (CSS, JavaScript, Images)</h3>
+<h3>https://docs.djangoproject.com/en/2.2/howto/static-files/</h3>
+<pre class="language-py"><code class="language-py">STATIC_URL <span class="token operator">=</span> <span class="token string">'/static/'</span><br>STATIC_ROOT <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>BASE_DIR<span class="token punctuation">,</span> <span class="token string">'static'</span><span class="token punctuation">)</span><br><br>MEDIA_URL <span class="token operator">=</span> <span class="token string">'/media/'</span><br>MEDIA_ROOT <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>BASE_DIR<span class="token punctuation">,</span> <span class="token string">'media'</span><span class="token punctuation">)</span></code></pre>
+
+
+</div>
+</article>
+
+  </main>
+  <footer class="site-footer">
+  <p>© 2021 Pratik Kute. All rights reserved.</p>
+</footer>
+
+  <script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
