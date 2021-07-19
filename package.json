@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "eleventy --serve",
-    "build": "eleventy"
+    "build": "eleventy",
+    "deploy": "git subtree push --prefix public origin gh-pages"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/kevin-powell/11ty-blog-site#readme",
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1"
+    "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
+    "html-minifier": "^4.0.0"
   }
 }
