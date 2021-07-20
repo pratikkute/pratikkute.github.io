@@ -4,7 +4,7 @@ backend:
   branch: main
 
 local_backend: true
-media_folder: "public/assets/blog"
+media_folder: "docs/assets/blog"
 public_folder: "/assets/blog"
 collections:
   - name: "blog"

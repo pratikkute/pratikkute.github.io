@@ -34,7 +34,6 @@ npm install @11ty/eleventy --save-dev
   "scripts": {
     "start": "eleventy --serve",
     "build": "eleventy",
-    "deploy": "git subtree push --prefix public origin gh-pages"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
@@ -84,7 +83,7 @@ module.exports = function(eleventyConfig) {
   return {
     dir: {
       input: "src",
-      output: "public",
+      output: "docs",
     },
   };
 }
@@ -105,7 +104,7 @@ backend:
   branch: main
 
 local_backend: true
-media_folder: "public/assets/blog"
+media_folder: "docs/assets/blog"
 public_folder: "/assets/blog"
 collections:
   - name: "blog"
