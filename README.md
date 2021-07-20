@@ -1,2 +1,1 @@
-# My website [[pratikkut](https://pratikkute.github.io)](https://pratikkute.github.io/).
-
+# My website [pratikkute](https://pratikkute.github.io/)

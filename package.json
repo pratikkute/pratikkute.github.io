@@ -4,7 +4,8 @@
   "description": "These are the starting files used by [Pratik Kute](https://kevinpowell.co) to create a personal blog site for the [Codementor](https://www.codementor.io/) DevProjects Challenge, [Create a fast and secure blog using JAMStack](#). You are free to use them however you want to get started with the challenge, if you'd like to start working on creating the site without worrying about the content itself.",
   "main": "index.js",
   "scripts": {
-    "start": "eleventy --serve",
+    "start": "eleventy --serve ",
+    "start-netlify-server": "npx netlify-cms-proxy-server",
     "build": "eleventy",
     "deploy": "git subtree push --prefix public origin gh-pages"
   },
