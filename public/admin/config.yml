@@ -1,8 +1,9 @@
 backend:
-  name: github
-  repo: pratikkute/pratikkute.github.io
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
   branch: main
-publish_mode: editorial_workflow
+
+local_backend: true
 media_folder: "public/assets/blog"
 public_folder: "/assets/blog"
 collections:
