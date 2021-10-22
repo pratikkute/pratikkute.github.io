@@ -66,6 +66,32 @@ function draw() {
 }
 ```
 
-## Now you are ready to swrite your game login
+### Load external fonts if needed
+
+
+```js
+function preload() {
+  myFont = loadFont("./assets/aAbstractGroovy.ttf");
+}
+```
+
+
+Use it in draw function
+
+```js
+function draw() {
+  .
+  .
+  textFont(myFont);
+  text("Game Over", width / 2, height / 2);
+  textSize(20);
+  text("press 'r' to restart", width / 2, height / 2 + 50);
+  .
+  .
+}
+```
+
+
+## Now you are ready to write your game logic
 
 Check the repo for final code [Repository](https://github.com/pratikkute/snake-p5js)
