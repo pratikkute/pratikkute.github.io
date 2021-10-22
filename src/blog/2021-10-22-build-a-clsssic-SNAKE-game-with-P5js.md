@@ -18,6 +18,9 @@ Ref:
 
 [Repository](https://github.com/pratikkute/snake-p5js)
 
+[Play it here](https://pratikkute.github.io/snake-p5js/)
+
+
 ## P5.js
 
 <p align="center">
