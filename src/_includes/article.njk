@@ -1,10 +1,10 @@
 ---
 layout: 'base.njk'
 ---
-    
+
 <article class="main-article">
 <div class="container container--narrow flow">
-  
+
     <h1 class="article-title">
       {{ title }}
     </h1>
@@ -14,8 +14,16 @@ layout: 'base.njk'
         {{ imageAlt }}
       </figcaption>
     </figure>
-    
+
     {{ content | safe}}
 
 </div>
 </article>
+<script src="https://utteranc.es/client.js"
+        repo="pratikkute/pratikkute.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+</script>
